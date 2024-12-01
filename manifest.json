@@ -1,0 +1,33 @@
+{
+    "manifest_version": 3,
+    "name": "Кликер",
+    "description": "Кликер для сайта фонбет.",
+    "version": "1.0",
+    "permissions": [
+      "storage", "tabs", "scripting"
+    ],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": {
+        "16": "icons/click16.png",
+        "48": "icons/click48.png",
+        "128": "icons/click128.png"
+      }
+    },
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"]
+      }
+    ],
+    "icons": {
+      "16": "icons/click16.png",
+      "48": "icons/click48.png",
+      "128": "icons/click128.png"
+    }
+  }
+  
