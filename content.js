@@ -15,10 +15,12 @@ const defineAction = (e, action) => {
     savedY = mouseY;
 
     const startInterval = async () => {
+        const { clickRate } = await chrome.storage.local.get('clickRate')
+
         chrome.runtime.sendMessage({
             action,
             url: window.location.hostname,
-            clickRate: await chrome.storage.local.get('clickRate').clickRate || 1,
+            clickRate: clickRate || 1,
             coordinates: [savedX, savedY]
         });
     }
@@ -35,8 +37,8 @@ const defineAction = (e, action) => {
 }
 
 document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY
+    mouseX = e.pageX;
+    mouseY = e.pageY
 })
 
 document.addEventListener("keyup", async (e) => {
@@ -62,6 +64,7 @@ document.addEventListener("keyup", async (e) => {
         }
 
         if (e.key === '`') {
+            e.preventDefault()
             document.querySelectorAll('.sport-competition-wrap--x2876 > div').forEach((el) => {
                 if (!el.classList.value.includes('collapsed')) {
                     el.click()
@@ -71,13 +74,13 @@ document.addEventListener("keyup", async (e) => {
 
         if (e.shiftKey && e.key === '+') {
             const input = document.querySelector('input.coupon-settings-sum__editor--KgfuY')
-            const stepPari = await chrome.storage.local.get('stepPari').stepPari || 500
+            const { stepPari } = await chrome.storage.local.get('stepPari') || 500
             input.value = Number(input.value) + stepPari
         }
 
         if (e.shiftKey && e.key === '-' || e.shiftKey && e.key === '_') {
             const input = document.querySelector('input.coupon-settings-sum__editor--KgfuY')
-            const stepPari = await chrome.storage.local.get('stepPari').stepPari || 500
+            const { stepPari } = await chrome.storage.local.get('stepPari') || 500
             input.value = Number(input.value) - stepPari
         }
     } catch (error) {
@@ -88,3 +91,30 @@ document.addEventListener("keyup", async (e) => {
         });
     }
 });
+
+setInterval(() => {
+    document.querySelectorAll('div.sport-base-event-wrap--WmtIb a.table-component-text--Tjj3g').forEach(async (el) => {
+        try {
+            const { matchTitles } = await chrome.storage.local.get('matchTitles')
+
+            if (!matchTitles[0][0]) {
+                el.removeAttribute('style')
+                return
+            }
+
+            const matchTitlesRegex = matchTitles?.map((el) => new RegExp(`${el[0]}|${el[1]}`, 'i'))
+
+            matchTitlesRegex?.forEach((regExp) => {
+                if (el.textContent.search(regExp) !== -1 && el.getAttribute('style') !== 'background-color: #ff6666') {
+                    el.setAttribute('style', 'background-color: #ff6666')
+                    chrome.runtime.sendMessage({
+                        action: 'playSound'
+                    });
+                }
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+    })
+}, 5000)

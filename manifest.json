@@ -28,6 +28,12 @@
       "16": "icons/click16.png",
       "48": "icons/click48.png",
       "128": "icons/click128.png"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["assets/click.wav"],
+            "matches": ["<all_urls>"]
+        }
+    ]
   }
   
