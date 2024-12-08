@@ -25,6 +25,13 @@ document.getElementById('saveStepPari').addEventListener('click', () => {
   chrome.storage.local.set({ stepPari });
 })
 
+document.getElementById('logout').addEventListener('click', () => {
+  chrome.runtime.sendMessage({
+    action: 'logout'
+  });
+  window.location.href = "../login/login.html";
+})
+
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.local.get('clickRate', (result) => {
     const clickRate = result.clickRate;
@@ -44,4 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('matchTitles').value = matchTitles;
     }
   });
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const { isAuthenticated } = await chrome.storage.local.get("isAuthenticated");
+
+  if (!isAuthenticated) {
+    window.location.href = "../login/login.html";
+  }
 });

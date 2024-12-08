@@ -22,10 +22,13 @@
   </style>
 </head>
 <body>
-  <h3 style="text-align: center; margin-bottom: 8px;">Кликер</h3>
+  <div style="display: flex; align-items: center; justify-content: space-between;">
+    <h3>Кликер</h3>
+    <button id="logout">Выйти</button>
+  </div>
   <div id="form">
     <div>
-      <h4 style="margin-bottom: 4px;">Кол-во кликов в секунду</h4>
+        <h4 style="margin-bottom: 4px;">Кол-во кликов в секунду</h4>
       <span id="invalidClickRate" hidden>Кол-во кликов не должно быть меньше 1 и больше 100</span>
       <div style="display: flex; flex-direction: column; gap: 4px;">
         <input id="clickRate" type="number" placeholder="1">
@@ -42,8 +45,7 @@
     <div>
       <h4 style="margin-bottom: 4px;">Название матчей</h4>
       <div style="display: flex; flex-direction: column; gap: 4px;">
-        <textarea id="matchTitles" placeholder="Динамо - ЦСКА, ...">
-        </textarea>
+        <textarea id="matchTitles" placeholder="Динамо - ЦСКА, ..."></textarea>
         <button id="saveMatchTitles">Сохранить</button>
       </div>
     </div>

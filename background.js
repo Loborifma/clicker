@@ -1,7 +1,18 @@
 const activeTabs = new Set();
 
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.storage.local.set({ isAuthenticated: false });
+});
+
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     try {
+        if (message.action === "showLoginPopup") {
+            chrome.action.setPopup({ popup: "pages/login/login.html" });
+            chrome.action.openPopup();
+        }
+        if (message.action === "logout") {
+            chrome.storage.local.set({ isAuthenticated: false });
+        }
         if (message.action === 'playSound') {
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
                 if (tabs.length > 0) {
@@ -32,20 +43,18 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             });
         }
         if (message.action === "duplicateClicker") {
-            const currentUrl = message.url;
-            chrome.windows.getAll({ populate: true }, (windows) => {
-                windows.forEach((window) => {
-                    window.tabs.forEach((tab) => {
-                        if (tab.url.includes(currentUrl) && !activeTabs.has(tab.id)) {
-                            activeTabs.add(tab.id);
-                            chrome.scripting.executeScript({
-                                target: { tabId: tab.id },
-                                func: startClicker,
-                                args: [message.clickRate, message.coordinates[0], message.coordinates[1]],
-                            });
-                        }
+            chrome.tabs.query({ active: true }, (tabs) => {
+                if (tabs.length > 0) {
+                    const activeTab = tabs[0];
+                    if (!activeTabs.has(activeTab.id)) {
+                        activeTabs.add(activeTab.id);
+                    }
+                    chrome.scripting.executeScript({
+                        target: { tabId: activeTab.id },
+                        func: startClicker,
+                        args: [message.clickRate, message.coordinates[0], message.coordinates[1]],
                     });
-                });
+                }
             });
         }
         if (message.action === "stopIntervals") {

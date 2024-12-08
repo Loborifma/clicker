@@ -43,6 +43,16 @@ document.addEventListener('mousemove', (e) => {
 
 document.addEventListener("keyup", async (e) => {
     try {
+        const { isAuthenticated } = await chrome.storage.local.get("isAuthenticated");
+        const hotKeys = ['F2', 'F9', 'F8', 'F4', 'Escape', '`']
+
+        if (!isAuthenticated && hotKeys.includes(e.key) || (e.shiftKey && e.key === '+') || (e.shiftKey && e.key === '-' || e.shiftKey && e.key === '_')) {
+            chrome.runtime.sendMessage({
+                action: "showLoginPopup"
+            });
+            return;
+        }
+
         if (e.key === 'F2') defineAction(e, 'createClicker')
         if (e.key === 'F9') defineAction(e, 'duplicateClicker')
 
@@ -74,14 +84,14 @@ document.addEventListener("keyup", async (e) => {
 
         if (e.shiftKey && e.key === '+') {
             const input = document.querySelector('input.coupon-settings-sum__editor--KgfuY')
-            const { stepPari } = await chrome.storage.local.get('stepPari') || 500
-            input.value = Number(input.value) + stepPari
+            const stepPariValue = await chrome.storage.local.get('stepPari').stepPari || 500
+            input.value = Number(input.value) + stepPariValue
         }
 
         if (e.shiftKey && e.key === '-' || e.shiftKey && e.key === '_') {
             const input = document.querySelector('input.coupon-settings-sum__editor--KgfuY')
-            const { stepPari } = await chrome.storage.local.get('stepPari') || 500
-            input.value = Number(input.value) - stepPari
+            const stepPariValue = await chrome.storage.local.get('stepPari').stepPari || 500
+            input.value = Number(input.value) - stepPariValue
         }
     } catch (error) {
         console.log(error);

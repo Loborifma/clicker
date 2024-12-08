@@ -11,7 +11,7 @@
       "service_worker": "background.js"
     },
     "action": {
-      "default_popup": "popup.html",
+      "default_popup": "pages/popup/popup.html",
       "default_icon": {
         "16": "icons/click16.png",
         "48": "icons/click48.png",
@@ -31,7 +31,7 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["assets/click.wav"],
+            "resources": ["assets/click.wav", "pages/login/login.html", "pages/popup/popup.html"],
             "matches": ["<all_urls>"]
         }
     ]

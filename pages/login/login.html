@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Кликер</title>
+    <style>
+      body {
+        width: 200px;
+        height: 150px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .error {
+        color: red;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3 style="text-align: center; margin-bottom: 8px;">Авторизация</h3>
+    <form id="loginForm">
+      <input type="text" id="login" placeholder="Логин" required />
+      <input type="password" id="password" placeholder="Пароль" required />
+      <button type="submit">Войти</button>
+    </form>
+    <span id="error" class="error" hidden>Неверный логин или пароль</span>
+    <script src="login.js"></script>
+  </body>
+</html>
